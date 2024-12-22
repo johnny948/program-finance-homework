@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Stock Portfolio Analysis</title>
+    <link rel="stylesheet" href="multiplestockAnalysis.css">
+</head>
+<body>
+<div id="navbar-container"></div>
+<h1>Multiple Stock Portfolio Analysis</h1>
+
+<h2>Multiple Stock Analysis Suggestion</h2>
+<div id="investment-container">
+<div>
+    <label for="investmentYears">investment horizon:</label>
+    <select id="investmentYears">
+        <option value="1">1 year</option>
+        <option value="2">2 year</option>
+        <option value="5">5 year</option>
+    </select>
+</div>
+
+<!-- The user selects the number of stocks to invest in. -->
+<div>
+    <label for="maxPortfolioSize">the number of stocks you want to invest:</label>
+    <input type="number" id="maxPortfolioSize" value="4" min="1" max="10">
+</div>
+
+<!-- Get recommendation button -->
+<div>
+    <button id="getRecommendationBtn">get stock recommendation</button>
+    <button id="analyze-btn">Analyze weights of each Portfolio</button>
+</div>
+</div>
+
+<!-- Display results -->
+<div id="recommendation"></div>
+<div id="result">
+
+</div>
+
+<label>Select Stock Ticker:</label><br>
+<div id="stock-ticker-container">
+    <!-- The checkbox will be generated here. -->
+</div><br><br>
+
+<br>
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Send a GET request to `/api/stocks` on the backend to fetch stock data.
+            const response = await fetch('http://localhost:3000/api/stocks', {
+                method: "GET",
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+
+                const stockList = result.stocks;
+
+
+                const stockContainer = document.getElementById("stock-ticker-container");
+
+                stockContainer.innerHTML = stockList.map((stock,index) => `
+                <label>
+                    <input type="checkbox" value="${stock}" /> ${stock}
+                </label>
+                ${(index + 1) % 2 === 0 ? '<br>' : ''}
+            `).join('');
+            } else {
+                console.error(result.message);
+                alert("Cannot load the ticker");
+            }
+        } catch (error) {
+            console.error("error in fetching stock ticker：", error);
+            alert("error in fetching stock ticker");
+        }
+    });
+
+
+
+    document.getElementById('analyze-btn').addEventListener('click', async () => {
+        try {
+
+            const selectedStocks = Array.from(document.querySelectorAll('#stock-ticker-container input:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedStocks.length === 0) {
+                alert('Please select at least one stock.');
+                return;
+            }
+
+            const queryString = selectedStocks.join(',');
+
+            // Send a request to the backend, including the stock ticker(s) selected by the user.
+            const response = await fetch(`http://localhost:3000/api/multiplestock-analysis?stocks=${queryString}`);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            // Fetch the JSON data returned by the backend.
+            const result = await response.json();
+
+            // check the returned result
+            if (result.success) {
+                // show the weights of portfolio
+                const portfolioWeights = result.portfolioWeights;
+
+                // show the results
+                const resultDiv = document.getElementById('result');
+
+                // Display the investment proportion results.
+                resultDiv.innerHTML = `
+                <h3>Portfolio Weights:</h3>
+                <ul>
+                    ${portfolioWeights.map((weight, index) => `
+                        <li>${selectedStocks[index]}: ${(weight * 100).toFixed(2)}%</li>
+                    `).join('')}
+                </ul>
+            `;
+            } else {
+                console.error(result.message);
+                alert("Failed to analyze the portfolio.");
+            }
+        } catch (error) {
+            // error handling
+            console.error("Error analyzing portfolio:", error);
+            alert("Failed to analyze portfolio. Please try again later.");
+        }
+    });
+
+    document.getElementById('getRecommendationBtn').addEventListener('click', async () => {
+        // Get the investment horizon and number of stocks entered by the user.
+        const investmentYears = document.getElementById('investmentYears').value;
+        const maxPortfolioSize = document.getElementById('maxPortfolioSize').value;
+
+        // Call the backend API to fetch stock recommendations.
+        try {
+            const response = await fetch(`http://localhost:3000/api/portfolio-recommendation?investmentYears=${investmentYears}&maxPortfolioSize=${maxPortfolioSize}`, {
+                method: "GET",
+                credentials: 'include',
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // show recommended results
+                document.getElementById('recommendation').innerHTML = `
+                <strong>recommended portfolios:</strong>
+                <ul>
+                    ${data.selectedStocks.map(stock => `<li>${stock}</li>`).join('')}
+                </ul>
+            `;
+            } else {
+                // show error information
+                document.getElementById('recommendation').innerHTML = `<span style="color: red;">${data.message}</span>`;
+            }
+        } catch (error) {
+
+            document.getElementById('recommendation').innerHTML = `<span style="color: red;">there are errors。</span>`;
+        }
+    });
+
+    window.onload = function() {
+
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+
+                document.getElementById('navbar-container').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading navbar:', error);
+            });
+    };
+
+</script>
+</body>
+</html>
