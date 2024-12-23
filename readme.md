@@ -4,7 +4,7 @@
 
 This is a stock trading application built with Node.js and Express.js, supporting the following features:
 
-![image-20241223012222302](D:\05) ZJC new\05) Rutgers\04) 2024 Programming Finance\Final Team Project\images\image-20241223012222302.png)
+![image-20241223111412652](images/image-20241223111412652.png)
 
 - User registration and login
 - Stock buying and selling
@@ -79,7 +79,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   - `password` (string)
 - **postman test(input and return format)**:
 
-![image-20241222231217402](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241222231217402.png)
+![image-20241223111516060](images/image-20241223111516060.png)
 
 #### Login User
 
@@ -90,7 +90,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   - `password` (string)
 - **postman test(input and return format)**:
 
-![image-20241222232755793](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241222232755793.png)
+![image-20241223111623226](images/image-20241223111623226.png)
 
 ------
 
@@ -110,7 +110,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   4. Record the transaction and update the balance.
 - **postman test(input and return format)**:
 
-![image-20241222231550264](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241222231550264.png)
+![image-20241223111705782](images/image-20241223111705782.png)
 
 #### View Held Stocks
 
@@ -121,7 +121,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   - Format timestamps to local time.
 - **postman test(input and return format)**:
 
-![image-20241222231726613](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241222231726613.png)
+![image-20241223111752360](images/image-20241223111752360.png)
 
 ------
 
@@ -139,7 +139,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   - Get single stock advice based on historical data and provide recommendations.
 - **postman test(input and return format)**:
 
-![image-20241223010008634](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241223010008634.png)
+![image-20241223112020483](images/image-20241223112020483.png)
 
 .
 
@@ -156,7 +156,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   - Build a correlation matrix and select stocks based on investment years and correlation.
 - **postman test(input and return format)**:.
 
-![image-20241222234102385](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241222234102385.png)
+![image-20241223112105226](images/image-20241223112105226.png)
 
 ------
 
@@ -170,7 +170,7 @@ Then start the frontend part. The service will run at `http://localhost:3001`.
   - return portfolilo weights for each stocks.
 - **postman test(input and return format)**:.
 
-![image-20241222235328795](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20241222235328795.png)
+![image-20241223112205404](images/image-20241223112205404.png)
 
 ------
 
